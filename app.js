@@ -306,8 +306,8 @@ const searchCityWeather = cityName => {
     //const call = fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIkey}`)
 
 
-    //call.then(response => response.json()).then(weatherSearchInfo => searchResultsList(weatherSerachInfo))
-    //call.catch(error => console.error(error));
+    //call.then(response => response.json()).then(weatherSearchInfo => searchResultsList(weatherSearchInfo))
+    // call.catch(error => console.error(error));
     searchResultsList(mock);
 };
 
