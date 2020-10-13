@@ -3,7 +3,7 @@
 }
 
 body{
-    background-color: #293251;
+    background-color: #7653ae;
 }
 
 .container{
@@ -16,7 +16,22 @@ body{
     border-radius: 10px;
     padding-bottom : 50px;
 }
-
+.list {
+    display: flex;
+    margin: 5px;
+  }
+  
+  .list-item {
+    background: white;
+    width: 400px;
+    height: 50px;
+    margin: 5px;
+  }
+  
+  .list-item-icon {
+    height: 25px;
+  }
+  
 .app-title{
     width: 300px;
     height: 50px;
@@ -28,7 +43,7 @@ body{
     padding: 15px;
     margin: 0 auto;
     font-size: 1.2em;
-    color: #293251;
+    color: #7c559f;
 }
 
 .notification{
@@ -47,7 +62,7 @@ body{
 .weather-container{
     width: 300px;
     height: 260px;
-    background-color: #F4F9FF;
+    background-color: #f2e3fc;
 }
 
 .weather-icon{
@@ -68,7 +83,7 @@ body{
 .temperature-value p{
     padding: 0;
     margin: 0;
-    color: #293251;
+    color: blueviolet;
     font-size: 4em;
     text-align: center;
     cursor: pointer;
@@ -79,7 +94,7 @@ body{
 }
 
 .temperature-value span{
-    color: #293251;
+    color: blueviolet;
     font-size: 0.5em;
 }
 
