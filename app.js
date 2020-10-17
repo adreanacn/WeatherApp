@@ -3,224 +3,40 @@
 
 const APIkey = "388a4376d8724a90c940fdb39099d740";
 const baseURL = "http://api.openweathermap.org/data/2.5/weather?";
+const mapboxglAccessToken = "'pk.eyJ1IjoiYWRyZWFuYWNuIiwiYSI6ImNrZ2RtM3pxMjBrYWgycmxlanM5bzkxZDcifQ.0rE9L5Qm1pCSYLh7QI4JHQ'";
+let map;
 
-const mock = {
-    message: "accurate",
-    cod: "200",
-    count: 5,
-    list: [
-        {
-            id: 3128760,
-            name: "Barcelona",
-            coord: {
-                lat: 41.3888,
-                lon: 2.159
-            },
-            main: {
-                temp: 290.86,
-                feels_like: 290.45,
-                temp_min: 289.82,
-                temp_max: 292.04,
-                pressure: 1011,
-                humidity: 59
-            },
-            dt: 1602612741,
-            wind: {
-                speed: 0.5,
-                deg: 130
-            },
-            sys: {
-                country: "ES"
-            },
-            rain: null,
-            snow: null,
-            clouds: {
-                all: 20
-            },
-            weather: [
-                {
-                    id: 801,
-                    main: "Clouds",
-                    description: "few clouds",
-                    icon: "02n"
-                }
-            ]
-        },
-        {
-            id: 6356055,
-            name: "Barcelona",
-            coord: {
-                lat: 41.3994,
-                lon: 2.128
-            },
-            main: {
-                temp: 290.8,
-                feels_like: 290.37,
-                temp_min: 289.82,
-                temp_max: 292.04,
-                pressure: 1011,
-                humidity: 59
-            },
-            dt: 1602612815,
-            wind: {
-                speed: 0.5,
-                deg: 130
-            },
-            sys: {
-                country: "ES"
-            },
-            rain: null,
-            snow: null,
-            clouds: {
-                all: 20
-            },
-            weather: [
-                {
-                    id: 801,
-                    main: "Clouds",
-                    description: "few clouds",
-                    icon: "02n"
-                }
-            ]
-        },
-        {
-            id: 3648559,
-            name: "Barcelona",
-            coord: {
-                lat: 10.1333,
-                lon: -64.7
-            },
-            main: {
-                temp: 303.57,
-                feels_like: 307.81,
-                temp_min: 303.57,
-                temp_max: 303.57,
-                pressure: 1009,
-                humidity: 64,
-                sea_level: 1009,
-                grnd_level: 1009
-            },
-            dt: 1602612772,
-            wind: {
-                speed: 1.3,
-                deg: 59
-            },
-            sys: {
-                country: "VE"
-            },
-            rain: {
-                "1h": 0.17
-            },
-            snow: null,
-            clouds: {
-                all: 33
-            },
-            weather: [
-                {
-                    id: 500,
-                    main: "Rain",
-                    description: "light rain",
-                    icon: "10d"
-                }
-            ]
-        },
-        {
-            id: 1726708,
-            name: "Barcelona",
-            coord: {
-                lat: 8.1592,
-                lon: 126.4342
-            },
-            main: {
-                temp: 298.36,
-                feels_like: 301.72,
-                temp_min: 298.36,
-                temp_max: 298.36,
-                pressure: 1006,
-                humidity: 84,
-                sea_level: 1006,
-                grnd_level: 1001
-            },
-            dt: 1602612618,
-            wind: {
-                speed: 2.15,
-                deg: 245
-            },
-            sys: {
-                country: "PH"
-            },
-            rain: {
-                "1h": 4.211
-            },
-            snow: null,
-            clouds: {
-                all: 99
-            },
-            weather: [
-                {
-                    id: 502,
-                    main: "Rain",
-                    description: "heavy intensity rain",
-                    icon: "10n"
-                }
-            ]
-        },
-        {
-            id: 1726705,
-            name: "Barcelona",
-            coord: {
-                lat: 12.8683,
-                lon: 124.1419
-            },
-            main: {
-                temp: 299.46,
-                feels_like: 302.1,
-                temp_min: 299.46,
-                temp_max: 299.46,
-                pressure: 1006,
-                humidity: 87,
-                sea_level: 1006,
-                grnd_level: 1005
-            },
-            dt: 1602612618,
-            wind: {
-                speed: 4.51,
-                deg: 352
-            },
-            sys: {
-                country: "PH"
-            },
-            rain: {
-                "1h": 5.615
-            },
-            snow: null,
-            clouds: {
-                all: 100
-            },
-            weather: [
-                {
-                    id: 502,
-                    main: "Rain",
-                    description: "heavy intensity rain",
-                    icon: "10n"
-                }
-            ]
-        }
-    ]
+const createMarker = (longitude, latitude) => new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+
+const createMap = (latitude, longitude) => {
+    const mapDiv = document.getElementById("map");
+    mapDiv.style.width = "700px";
+    mapDiv.style.height = "700px";
+
+    mapboxgl.accessToken = mapboxglAccessToken;
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [longitude, latitude],
+        zoom: 8
+    });
+
+    new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+
+    return map;
 };
-
 
 
 const onSuccess = position => {
 
-
     const {
         coords: { latitude, longitude } }
         = position;
-
+    map = createMap(latitude, longitude);
+    createMarker(latitude, longitude, map);
     callWeather(latitude, longitude);
 };
-
 
 
 const onError = error => {
@@ -242,13 +58,14 @@ const capitalizeFirstLetters = text => {
     return arrayResult.join(" ");
 };
 
-const showWeatherInfo = info => {
+const showWeatherInfo = city => {
     const {
         main: { temp },
         name,
         sys: { country },
+        coord: { lat, lon },
         weather: [{ description, icon }]
-    } = info;
+    } = city;
 
     const iconElement = document.getElementById("icon");
     iconElement.src = `icons/${icon}.png`;
@@ -266,16 +83,15 @@ const showWeatherInfo = info => {
 };
 
 const searchResultsList = results => {
-    console.log("results", results);
     const resultsList = document.getElementById("results");
 
     const { list: citiesList } = results;
 
     citiesList.map(city => {
-        console.log("==>>>", city);
         const {
             main: { temp },
             name,
+            coord: { lat: latitude, lon: longitude },
             sys: { country },
             weather: [{ description, icon }]
         } = city;
@@ -288,11 +104,47 @@ const searchResultsList = results => {
         img.src = `icons/${icon}.png`;
         listItem.appendChild(img);
         const addButton = document.createElement("button");
-        addButton.onclick = () => console.log("Soy el elemento ", listItem.innerHTML);
+        addButton.innerHTML = "+ Add";
+        addButton.onclick = () => {
+            createMarker(longitude, latitude);
+            addElementToList(city);
+        };
+
         listItem.appendChild(addButton);
 
         resultsList.appendChild(listItem);
     });
+};
+
+const addElementToList = city => {
+    const {
+        id,
+        main: { temp },
+        name,
+        sys: { country },
+        weather: [{ description, icon }]
+    } = city;
+
+    const container = document.getElementById("container");
+    const clone = container.cloneNode(true);
+    clone.id = `container-${name}-${id}`;
+
+    //elementos container
+    const [titleDiv, notificationDiv, weatherContainerDiv] = clone.children;
+    title.children[0].innerHTML = `${name} Weather`;
+
+    //elementos weathercontainerDiv
+    const [weatherIconDiv, temperatureValueDiv, temperatureDescriptionDiv, locationDiv] = weatherContainerDiv.children;
+
+    weatherContainerDiv.children[0].src = `icons/${icon}.png`;
+    weatherContainerDiv.children[0].id = `icons-${name}-${id}`;
+
+    temperatureValueDiv.children[0].id = `temperature-value-${name}-${id}`
+    temperatureValueDiv.children[0].innerHTML = `${convertKelvintoCelsius(temp)}°C`;
+
+    console.log("addElementToList", city, titleDiv, notificationDiv, weatherContainerDiv);
+    const list = document.getElementsByClassName("list")[0];
+    list.appendChild(clone);
 };
 
 const callWeather = (latitude, longitude) => {
@@ -303,11 +155,11 @@ const callWeather = (latitude, longitude) => {
 };
 
 const searchCityWeather = cityName => {
-    //const call = fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIkey}`)
+    const call = fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIkey}`)
 
 
-    //call.then(response => response.json()).then(weatherSearchInfo => searchResultsList(weatherSearchInfo))
-    // call.catch(error => console.error(error));
+    call.then(response => response.json()).then(weatherSearchInfo => searchResultsList(weatherSearchInfo))
+    call.catch(error => console.error(error));
     searchResultsList(mock);
 };
 
