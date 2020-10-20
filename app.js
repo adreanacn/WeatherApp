@@ -3,15 +3,16 @@
 
 const APIkey = "388a4376d8724a90c940fdb39099d740";
 const baseURL = "http://api.openweathermap.org/data/2.5/weather?";
-const mapboxglAccessToken = "'pk.eyJ1IjoiYWRyZWFuYWNuIiwiYSI6ImNrZ2RtM3pxMjBrYWgycmxlanM5bzkxZDcifQ.0rE9L5Qm1pCSYLh7QI4JHQ'";
+const mapboxglAccessToken = "pk.eyJ1IjoiYWRyZWFuYWNuIiwiYSI6ImNrZ2RtM3pxMjBrYWgycmxlanM5bzkxZDcifQ.0rE9L5Qm1pCSYLh7QI4JHQ";
 let map;
 
 const createMarker = (longitude, latitude) => new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
 
 const createMap = (latitude, longitude) => {
     const mapDiv = document.getElementById("map");
-    mapDiv.style.width = "700px";
-    mapDiv.style.height = "700px";
+    mapDiv.style.width = "500px";
+    mapDiv.style.height = "500px";
+
 
     mapboxgl.accessToken = mapboxglAccessToken;
 
